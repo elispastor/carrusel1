@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrusel Puerta Giratoria 3D</title>
+    <style>
+        /* Estilos generales de la página para centrar el carrusel */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #1a1a1a; /* Fondo oscuro para que resalten las fotos */
+            font-family: sans-serif;
+            overflow: hidden;
+        }
+
+        /* Contenedor principal con perspectiva para el efecto 3D */
+        .escenario-3d {
+            perspective: 1200px; /* Da la sensación de profundidad */
+            width: 300px;
+            height: 300px;
+        }
+
+        /* El carrusel que va a rotar */
+        .carrusel-puerta {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d; /* Permite que los hijos mantengan su posición 3D */
+            transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1); /* Animación suave tipo "puerta" */
+        }
+
+        /* Cada una de las caras del carrusel */
+        .cara-carrusel {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            /* Borde blanco para que parezca una foto */
+            border: 5px solid #fff;
+            background-color: #fff;
+        }
+
+        /* Acomodo de las imágenes en el espacio 3D */
+        /* Para 3 imágenes, el ángulo es 360/3 = 120 grados */
+        
+        .cara-carrusel:nth-child(1) {
+            transform: rotateY(0deg) translateZ(250px);
+        }
+        .cara-carrusel:nth-child(2) {
+            transform: rotateY(120deg) translateZ(250px);
+        }
+        .cara-carrusel:nth-child(3) {
+            transform: rotateY(240deg) translateZ(250px);
+        }
+
+        /* Estilo de las imágenes */
+        .cara-carrusel img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Asegura que la foto cuadrada llene el espacio sin deformarse */
+            display: block;
+        }
+
+        /* Efecto de sombra interna para darle realismo a la "puerta" */
+        .cara-carrusel::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 20%, rgba(0,0,0,0) 80%, rgba(0,0,0,0.3) 100%);
+            pointer-events: none;
+        }
+
+        /* Ajuste para pantallas de celular */
+        @media (max-width: 600px) {
+            .escenario-3d { width: 250px; height: 250px; }
+            .cara-carrusel:nth-child(1) { transform: rotateY(0deg) translateZ(200px); }
+            .cara-carrusel:nth-child(2) { transform: rotateY(120deg) translateZ(200px); }
+            .cara-carrusel:nth-child(3) { transform: rotateY(240deg) translateZ(200px); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Contenedor del Carrusel -->
+    <div class="escenario-3d">
+        <div class="carrusel-puerta" id="miCarrusel">
+            <div class="cara-carrusel"><img src="1.jpg" alt="Imagen 1"></div>
+            <div class="cara-carrusel"><img src="2.jpg" alt="Imagen 2"></div>
+            <div class="cara-carrusel"><img src="3.jpg" alt="Imagen 3"></div>
+        </div>
+    </div>
+
+    <script>
+        // Lógica para que gire automáticamente cada 7 segundos
+        let anguloActual = 0;
+        const carrusel = document.getElementById('miCarrusel');
+        
+        // 360 grados dividido entre las 3 imágenes = 120 grados por giro
+        const anguloPorGiro = 120; 
+
+        setInterval(() => {
+            anguloActual -= anguloPorGiro; // Restamos para que gire hacia la izquierda (efecto puerta)
+            carrusel.style.transform = `rotateY(${anguloActual}deg)`;
+        }, 7000); // 7000 milisegundos = 7 segundos exactos
+    </script>
+
+</body>
+</html>
