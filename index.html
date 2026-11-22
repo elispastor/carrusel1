@@ -3,25 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrusel Puerta Giratoria 3D - Premium</title>
+    <title>Carrusel Puerta Giratoria - Plátanos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
         body {
-            margin: 0;
-            padding: 0;
+            background-color: #0f2e14; /* Verde oscuro elegante */
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #0f2e14; /* Verde oscuro elegante de fondo */
-            font-family: 'Poppins', sans-serif;
             overflow: hidden;
         }
 
-        /* Contenedor con perspectiva */
+        /* Título arriba */
+        .titulo-carrusel {
+            position: absolute;
+            top: 40px;
+            width: 100%;
+            text-align: center;
+            color: #ffcc00;
+            font-size: 1.8rem;
+            font-weight: 900;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        /* Escenario 3D */
         .escenario-3d {
             perspective: 1200px;
-            width: 340px;
-            height: 340px;
+            width: 260px;
+            height: 360px; /* Formato vertical */
+            margin-top: 50px;
         }
 
         .carrusel-puerta {
@@ -32,75 +47,52 @@
             transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* Tarjetas de las imágenes */
+        /* Las tarjetas de las fotos */
         .cara-carrusel {
             position: absolute;
             width: 100%;
             height: 100%;
             border-radius: 20px;
             overflow: hidden;
-            
-            /* Fondo blanco para que las imágenes que no son cuadradas no se vean cortadas */
-            background-color: #ffffff; 
-            
-            /* Borde elegante y sombra profunda */
-            border: 4px solid #e0e0e0;
+            background-color: #ffffff;
+            border: 6px solid #ffffff; /* Marco blanco */
             box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-            
-            /* TRUCO CLAVE: Padding interno para que la imagen no toque los bordes */
-            padding: 15px;
-            box-sizing: border-box;
-            
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
-        /* Posicionamiento 3D */
-        .cara-carrusel:nth-child(1) { transform: rotateY(0deg) translateZ(280px); }
-        .cara-carrusel:nth-child(2) { transform: rotateY(120deg) translateZ(280px); }
-        .cara-carrusel:nth-child(3) { transform: rotateY(240deg) translateZ(280px); }
+        /* Posicionamiento 3D para 3 imágenes */
+        .cara-carrusel:nth-child(1) { transform: rotateY(0deg) translateZ(250px); }
+        .cara-carrusel:nth-child(2) { transform: rotateY(120deg) translateZ(250px); }
+        .cara-carrusel:nth-child(3) { transform: rotateY(240deg) translateZ(250px); }
 
-        /* ESTILO DE LAS IMÁGENES */
+        /* ESTO ES CLAVE: Cómo se muestran las imágenes */
         .cara-carrusel img {
-            max-width: 100%;
-            max-height: 100%;
             width: 100%;
             height: 100%;
-            
-            /* 'contain' hace que la imagen se vea COMPLETA, sin recortarse */
-            object-fit: contain; 
-            
-            border-radius: 10px;
+            object-fit: cover; /* Rellena todo el marco sin deformarse */
             display: block;
         }
 
-        /* Brillo sutil en los bordes (opcional) */
-        .cara-carrusel::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            border-radius: 20px;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
-            pointer-events: none;
-        }
-
-        /* Ajuste para pantallas de celular */
+        /* Ajuste para celulares */
         @media (max-width: 600px) {
-            .escenario-3d { width: 280px; height: 280px; }
-            .cara-carrusel:nth-child(1) { transform: rotateY(0deg) translateZ(220px); }
-            .cara-carrusel:nth-child(2) { transform: rotateY(120deg) translateZ(220px); }
-            .cara-carrusel:nth-child(3) { transform: rotateY(240deg) translateZ(220px); }
+            .titulo-carrusel { font-size: 1.5rem; top: 20px; }
+            .escenario-3d { width: 220px; height: 300px; margin-top: 60px; }
+            .cara-carrusel:nth-child(1) { transform: rotateY(0deg) translateZ(210px); }
+            .cara-carrusel:nth-child(2) { transform: rotateY(120deg) translateZ(210px); }
+            .cara-carrusel:nth-child(3) { transform: rotateY(240deg) translateZ(210px); }
         }
     </style>
 </head>
 <body>
 
+    <!-- Título Grande -->
+    <div class="titulo-carrusel">
+        Mientras más tickets,<br>más oportunidades tienes de ganar.
+    </div>
+
+    <!-- Carrusel -->
     <div class="escenario-3d">
         <div class="carrusel-puerta" id="miCarrusel">
-            <!-- Tu círculo (o primera imagen) -->
             <div class="cara-carrusel"><img src="1.jpg" alt="Imagen 1"></div>
-            <!-- Las otras dos imágenes que tenían textos pegados -->
             <div class="cara-carrusel"><img src="2.jpg" alt="Imagen 2"></div>
             <div class="cara-carrusel"><img src="3.jpg" alt="Imagen 3"></div>
         </div>
@@ -109,10 +101,10 @@
     <script>
         let anguloActual = 0;
         const carrusel = document.getElementById('miCarrusel');
-        const anguloPorGiro = 120; 
-
+        
+        // Gira cada 7 segundos
         setInterval(() => {
-            anguloActual -= anguloPorGiro; 
+            anguloActual -= 120; 
             carrusel.style.transform = `rotateY(${anguloActual}deg)`;
         }, 7000); 
     </script>
